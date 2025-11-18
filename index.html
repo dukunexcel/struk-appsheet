@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cetak Struk</title>
+    <style>
+        /* Pengaturan Tampilan Umum */
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Font mesin tik */
+            font-size: 12px;
+            width: 58mm; /* Lebar kertas thermal standar */
+            margin: 0;
+            padding: 5px;
+            color: #000;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .center { text-align: center; }
+        .left { text-align: left; }
+        .right { text-align: right; }
+        .bold { fontWeight: bold; }
+
+        /* Garis Pemisah */
+        .line {
+            border-bottom: 1px dashed #000;
+            margin: 5px 0;
+        }
+
+        /* Area Daftar Item */
+        .item-list {
+            white-space: pre-wrap; /* Agar spasi & enter dari AppSheet terbaca */
+            width: 100%;
+        }
+
+        /* Sembunyikan tombol saat dicetak */
+        @media print {
+            #btn-print { display: none; }
+            @page { margin: 0; }
+        }
+        
+        #btn-print {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="btn-print" onclick="window.print()">🖨️ Cetak Struk</button>
+
+    <div class="container">
+        <div class="center bold" style="font-size: 14px;" id="toko">NAMA TOKO</div>
+        <div class="center" id="alamat">Alamat Toko</div>
+        <div class="center" id="telp">Telp</div>
+        
+        <div class="line"></div>
+
+        <div>No   : <span id="no">-</span></div>
+        <div>Tgl  : <span id="tgl">-</span></div>
+        <div>Kasir: <span id="kasir">-</span></div>
+
+        <div class="line"></div>
+
+        <div class="item-list" id="item">
+            Item 1 ..... 10.000
+            Item 2 ..... 20.000
+        </div>
+
+        <div class="line"></div>
+
+        <table width="100%">
+            <tr>
+                <td>Total</td>
+                <td class="right bold" id="total">0</td>
+            </tr>
+            <tr>
+                <td>Bayar</td>
+                <td class="right" id="bayar">0</td>
+            </tr>
+            <tr>
+                <td>Kembali</td>
+                <td class="right" id="kembali">0</td>
+            </tr>
+        </table>
+
+        <div class="line"></div>
+
+        <div class="center">Terima Kasih</div>
+        <div class="center">Selamat Menikmati</div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengambil data dari URL
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Masukkan data URL ke dalam HTML
+        document.getElementById('toko').innerText = getQueryParam('toko') || 'LENTERA COFFEE';
+        document.getElementById('alamat').innerText = getQueryParam('alamat') || '';
+        document.getElementById('telp').innerText = getQueryParam('telp') || '';
+        
+        document.getElementById('no').innerText = getQueryParam('no') || '-';
+        document.getElementById('tgl').innerText = getQueryParam('tgl') || '-';
+        document.getElementById('kasir').innerText = getQueryParam('kasir') || '-';
+        
+        // Khusus Item: Biarkan format enter (%0A) terbaca
+        document.getElementById('item').innerText = getQueryParam('item') || '';
+
+        document.getElementById('total').innerText = getQueryParam('total') || '0';
+        document.getElementById('bayar').innerText = getQueryParam('bayar') || '0';
+        document.getElementById('kembali').innerText = getQueryParam('kembali') || '0';
+
+        // Otomatis memuncukan dialog print saat halaman terbuka
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500); // Jeda 0.5 detik agar data termuat dulu
+        };
+    </script>
+</body>
+</html>
